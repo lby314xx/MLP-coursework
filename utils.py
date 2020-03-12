@@ -3,7 +3,7 @@ import os
 
 
 def save_checkpoint(model, rate, epoch, cuda):
-    model_folder = "SrSENet_x%d_checkpoints/" % rate
+    model_folder = "SKNet_x%d_checkpoints/" % rate
     model_out_path = model_folder + "{}.pth".format(epoch)
 
     state_dict = model.state_dict()
