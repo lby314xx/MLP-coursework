@@ -24,7 +24,7 @@ parser.add_argument("--lr", type=float, default=1e-4, help="Learning Rate. Defau
 parser.add_argument("--step", type=int, default=100,
                     help="Sets the learning rate to the initial LR decayed by momentum every n epochs, Default: n=100")
 parser.add_argument("--cuda", action="store_true", help="Use cuda?")
-parser.add_argument("--gpus", type=int, default=2, help="nums of gpu to use")
+parser.add_argument("--gpus", type=int, default=1, help="nums of gpu to use")
 parser.add_argument("--resume", default="", type=str, help="Path to checkpoint (default: none)")
 parser.add_argument("--start-epoch", default=1, type=int, help="Manual epoch number (useful on restarts)")
 parser.add_argument("--threads", type=int, default=1, help="Number of threads for data loader to use, Default: 1")
