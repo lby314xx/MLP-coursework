@@ -38,12 +38,16 @@ def main():
 
     logger = SummaryWriter()
 
+    # cuda = opt.cuda
+    # if cuda:
+    #     print("=> use gpu id: '{}'".format(opt.gpus))
+    #     os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpus
+    #     if not torch.cuda.is_available():
+    #             raise Exception("No GPU found or Wrong gpu id, please run without --cuda")
+
     cuda = opt.cuda
-    if cuda:
-        print("=> use gpu id: '{}'".format(opt.gpus))
-        os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpus
-        if not torch.cuda.is_available():
-                raise Exception("No GPU found or Wrong gpu id, please run without --cuda")
+    if cuda and not torch.cuda.is_available():
+        raise Exception("No GPU found, please run without --cuda")
 
     opt.seed = random.randint(1, 10000)
     print("Random Seed: ", opt.seed)
