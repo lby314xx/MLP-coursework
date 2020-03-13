@@ -63,8 +63,8 @@ def main():
 
     print("===> Building modelPth")
     model = Net(opt.blocks, opt.rate)
-    criterion = nn.MSELoss(size_average=False)
-    # criterion = L1_Charbonnier_loss()
+    # criterion = nn.MSELoss(size_average=False)
+    criterion = L1_Charbonnier_loss()
 
     print("===> Setting GPU")
     if cuda:
@@ -94,8 +94,8 @@ def main():
             print("=> no modelPth found at '{}'".format(opt.pretrained))
 
     print("===> Setting Optimizer")
-    optimizer = optim.SGD(model.parameters(), lr=opt.lr, momentum=opt.momentum, weight_decay=opt.weight_decay)
-    # optimizer = optim.Adam(model.parameters(), lr=opt.lr)
+    # optimizer = optim.SGD(model.parameters(), lr=opt.lr, momentum=opt.momentum, weight_decay=opt.weight_decay)
+    optimizer = optim.Adam(model.parameters(), lr=opt.lr)
 
     print("===> Training")
     for epoch in range(opt.start_epoch, opt.nEpochs + 1):
@@ -138,7 +138,7 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
         optimizer.step()
 
         if iteration % 10 == 0:
-            print("===> Epoch[{}]({}/{}): Loss: {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data[0]))
+            print("===> Epoch[{}]({}/{}): Loss: {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data))
 
 
 def save_checkpoint(model, epoch):
