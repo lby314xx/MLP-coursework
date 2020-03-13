@@ -27,7 +27,7 @@ parser.add_argument("--threads", type=int, default=1, help="Number of threads fo
 parser.add_argument("--momentum", default=0.9, type=float, help="Momentum, Default: 0.9")
 parser.add_argument("--weight-decay", "--wd", default=1e-4, type=float, help="Weight decay, Default: 1e-4")
 parser.add_argument('--pretrained', default='', type=str, help='path to pretrained modelPth (default: none)')
-parser.add_argument("--gpus", default="1", type=str, help="gpu ids (default: 0)")
+parser.add_argument("--gpus", default="1", type=int, help="gpu ids (default: 0)")
 parser.add_argument("--datasets", default="train.h5", type=str, help="path to load train datasets(default: none)")
 
 
