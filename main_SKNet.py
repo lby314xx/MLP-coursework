@@ -59,7 +59,7 @@ def main():
 
     print("===> Loading datasets")
     train_set = DatasetFromHdf5(opt.datasets)
-    training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True)
+    training_data_loader = DataLoader(dataset=train_set, num_workers=opt.threads, batch_size=opt.batchSize, shuffle=True, drop_last=True)
 
     print("===> Building modelPth")
     model = Net(opt.blocks, opt.rate)
