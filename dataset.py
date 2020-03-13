@@ -6,8 +6,8 @@ class DatasetFromHdf5(data.Dataset):
     def __init__(self, file_path):
         super(DatasetFromHdf5, self).__init__()
         hf = h5py.File(file_path)
-        self.data = hf.get('data')
-        self.target = hf.get('label_x4')
+        self.data = hf.get('data')[:-1, :, :, :]
+        self.target = hf.get('label_x4')[:-1, :, :, :]
 
     def __getitem__(self, index):
         return torch.from_numpy(self.data[index,:,:,:]).float(), torch.from_numpy(self.target[index,:,:,:]).float()
