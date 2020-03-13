@@ -17,7 +17,7 @@ parser.add_argument("--batchSize", type=int, default=256, help="Training batch s
 parser.add_argument("--rate", default=4, type=int, help="upscale rate, Default: n=4")
 parser.add_argument("--blocks", default=8, type=int, help="blocks nums of SrSEBlock, Default: n=8")
 parser.add_argument("--nEpochs", type=int, default=50, help="Number of epochs to train for")
-parser.add_argument("--lr", type=float, default=0.1, help="Learning Rate. Default=0.1")
+parser.add_argument("--lr", type=float, default=1e-4, help="Learning Rate. Default=0.1")
 parser.add_argument("--step", type=int, default=10, help="Sets the learning rate to the initial LR decayed by momentum every n epochs, Default: n=10")
 parser.add_argument("--cuda", action="store_true", help="Use cuda?")
 parser.add_argument("--resume", default="", type=str, help="Path to checkpoint (default: none)")
@@ -108,10 +108,10 @@ def adjust_learning_rate(optimizer, epoch):
     return lr
 
 def train(training_data_loader, optimizer, model, criterion, epoch):
-    lr = adjust_learning_rate(optimizer, epoch-1)
-
-    for param_group in optimizer.param_groups:
-        param_group["lr"] = lr
+    # lr = adjust_learning_rate(optimizer, epoch-1)
+    #
+    # for param_group in optimizer.param_groups:
+    #     param_group["lr"] = lr
 
     print("Epoch = {}, lr = {}".format(epoch, optimizer.param_groups[0]["lr"]))
 
