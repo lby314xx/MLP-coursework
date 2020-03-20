@@ -7,8 +7,8 @@ import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 # from vdsr import Net
-# from model.SKNet import Net, L1_Charbonnier_loss
-from model2.SrSENet import Net, L1_Charbonnier_loss
+from model.SKNet import Net, L1_Charbonnier_loss
+# from model2.SrSENet import Net, L1_Charbonnier_loss
 from dataset import DatasetFromHdf5
 from tensorboardX import SummaryWriter
 
