@@ -109,10 +109,10 @@ def adjust_learning_rate(optimizer, epoch):
     return lr
 
 def train(training_data_loader, optimizer, model, criterion, epoch):
-    # lr = adjust_learning_rate(optimizer, epoch-1)
-    #
-    # for param_group in optimizer.param_groups:
-    #     param_group["lr"] = lr
+    lr = adjust_learning_rate(optimizer, epoch-1)
+
+    for param_group in optimizer.param_groups:
+        param_group["lr"] = lr
 
     print("Epoch = {}, lr = {}".format(epoch, optimizer.param_groups[0]["lr"]))
 
