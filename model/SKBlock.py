@@ -1,5 +1,5 @@
 import torch.nn as nn
-from model.SKLayer2 import SKLayer
+from model.SKLayer3 import SKLayer
 
 
 class SKBlock(nn.Module):
