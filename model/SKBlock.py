@@ -14,8 +14,9 @@ class SKBlock(nn.Module):
 
     def forward(self, x):
         residual = x
-        out = self.relu1(self.conv1(x))
-        out = self.relu2(self.conv2(out))
+        # out = self.relu1(self.conv1(x))
+        # out = self.relu2(self.conv2(out))
+        out = x
 
         if self.use_sk:
             out = self.sk(out)

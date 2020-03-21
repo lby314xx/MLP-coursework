@@ -103,16 +103,18 @@ def main():
         train(training_data_loader, optimizer, model, criterion, epoch)
         save_checkpoint(model, epoch)
 
+
 def adjust_learning_rate(optimizer, epoch):
     """Sets the learning rate to the initial LR decayed by 10 every 10 epochs"""
     lr = opt.lr * (0.1 ** (epoch // opt.step))
     return lr
 
-def train(training_data_loader, optimizer, model, criterion, epoch):
-    lr = adjust_learning_rate(optimizer, epoch-1)
 
-    for param_group in optimizer.param_groups:
-        param_group["lr"] = lr
+def train(training_data_loader, optimizer, model, criterion, epoch):
+    # lr = adjust_learning_rate(optimizer, epoch-1)
+    #
+    # for param_group in optimizer.param_groups:
+    #     param_group["lr"] = lr
 
     print("Epoch = {}, lr = {}".format(epoch, optimizer.param_groups[0]["lr"]))
 
