@@ -1,5 +1,5 @@
 import torch.nn as nn
-from model.SKLayer import SKLayer
+from model.SKLayer import SKLayer, FRM
 
 
 class SKBlock(nn.Module):
@@ -11,6 +11,7 @@ class SKBlock(nn.Module):
         self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.relu2 = nn.LeakyReLU()
         self.sk = SKLayer(planes)
+        self.frm = FRM(planes, planes)
 
     def forward(self, x):
         residual = x
@@ -19,5 +20,7 @@ class SKBlock(nn.Module):
 
         if self.use_sk:
             out = self.sk(out)
+            out = self.frm(out)
+
         out += residual
         return out

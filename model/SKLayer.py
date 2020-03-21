@@ -32,18 +32,19 @@ class SKLayer(nn.Module):
             output.append(conv(xx))
         # the part of fusion
         U = reduce(lambda x, y: x+y, output)
-        U = self.frm(U)
-        # s = self.global_pool(U)
-        # z = self.fc1(s)
-        # a_b = self.fc2(z)
-        # a_b = a_b.reshape(batch_size, self.M, self.out_channels, -1)
-        # a_b = self.softmax(a_b)
-        # #  the part of selection
-        # a_b = list(a_b.chunk(self.M, dim=1))   # split to a and b
-        # a_b = list(map(lambda x: x.reshape(batch_size, self.out_channels, 1, 1), a_b))
-        # V = list(map(lambda x, y: x*y, output, a_b))
-        # V = reduce(lambda x, y: x+y, V)
-        return U
+
+        s = self.global_pool(U)
+        z = self.fc1(s)
+        a_b = self.fc2(z)
+        a_b = a_b.reshape(batch_size, self.M, self.out_channels, -1)
+        a_b = self.softmax(a_b)
+        #  the part of selection
+        a_b = list(a_b.chunk(self.M, dim=1))   # split to a and b
+        a_b = list(map(lambda x: x.reshape(batch_size, self.out_channels, 1, 1), a_b))
+        V = list(map(lambda x, y: x*y, output, a_b))
+        V = reduce(lambda x, y: x+y, V)
+        V = self.frm(V)
+        return V
 
 
 class FRM(nn.Module):
