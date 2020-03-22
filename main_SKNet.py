@@ -141,7 +141,8 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
         # nn.utils.clip_grad_norm(model.parameters(), opt.clip)
         optimizer.step()
 
-        if iteration % 10 == 0:
+        # if iteration % 10 == 0:
+        if iteration == len(training_data_loader):
             print("===> Epoch[{}]({}/{}): Loss: {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data))
 
 
