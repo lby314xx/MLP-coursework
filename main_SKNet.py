@@ -11,7 +11,6 @@ from model.SKNet import Net, L1_Charbonnier_loss
 # from model2.SrSENet import Net, L1_Charbonnier_loss
 from dataset import DatasetFromHdf5
 from tensorboardX import SummaryWriter
-import tqdm
 
 # Training settings
 parser = argparse.ArgumentParser(description="PyTorch SKNet")
@@ -121,7 +120,7 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
 
     model.train()
 
-    for iteration, batch in enumerate(tqdm(training_data_loader), 1):
+    for iteration, batch in enumerate(training_data_loader, 1):
         input, target = Variable(batch[0]), Variable(batch[1], requires_grad=False)
 
         if opt.cuda:
