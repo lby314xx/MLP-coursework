@@ -6,9 +6,8 @@ import torch.nn as nn
 import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
-# from vdsr import Net
-from model.SKNet import Net, L1_Charbonnier_loss
-# from model2.SrSENet import Net, L1_Charbonnier_loss
+# from model.SKNet import Net, L1_Charbonnier_loss
+from model.baseline import Net, L1_Charbonnier_loss
 from dataset import DatasetFromHdf5
 from tensorboardX import SummaryWriter
 from tqdm import tqdm
@@ -40,13 +39,6 @@ def main():
 
     logger = SummaryWriter()
 
-    # cuda = opt.cuda
-    # if cuda:
-    #     print("=> use gpu id: '{}'".format(opt.gpus))
-    #     os.environ["CUDA_VISIBLE_DEVICES"] = opt.gpus
-    #     if not torch.cuda.is_available():
-    #             raise Exception("No GPU found or Wrong gpu id, please run without --cuda")
-
     cuda = opt.cuda
     if cuda and not torch.cuda.is_available():
         raise Exception("No GPU found, please run without --cuda")
@@ -65,7 +57,6 @@ def main():
 
     print("===> Building modelPth")
     model = Net(opt.blocks, opt.rate)
-    # criterion = nn.MSELoss(size_average=False)
     criterion = L1_Charbonnier_loss()
 
     print("===> Setting GPU")
@@ -137,11 +128,9 @@ def train(training_data_loader, optimizer, model, criterion, epoch):
 
         loss = criterion(sr, target)
         optimizer.zero_grad()
-        loss.backward() 
-        # nn.utils.clip_grad_norm(model.parameters(), opt.clip)
+        loss.backward()
         optimizer.step()
 
-        # if iteration % 10 == 0:
         if iteration == len(training_data_loader):
             print("===> Epoch[{}]({}/{}): Loss: {:.10f}".format(epoch, iteration, len(training_data_loader), loss.data))
 
