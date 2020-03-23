@@ -7,14 +7,14 @@ import torch.optim as optim
 from torch.autograd import Variable
 from torch.utils.data import DataLoader
 # from model.SKNet import Net, L1_Charbonnier_loss
-from model.baseline import Net, L1_Charbonnier_loss
+from model.sk_optimized import Net, L1_Charbonnier_loss
 from dataset import DatasetFromHdf5
 from tensorboardX import SummaryWriter
 from tqdm import tqdm
 
 # Training settings
 parser = argparse.ArgumentParser(description="PyTorch SKNet")
-parser.add_argument("--batchSize", type=int, default=256, help="Training batch size")
+parser.add_argument("--batchSize", type=int, default=128, help="Training batch size")
 parser.add_argument("--rate", default=4, type=int, help="upscale rate, Default: n=4")
 parser.add_argument("--blocks", default=8, type=int, help="blocks nums of SrSEBlock, Default: n=8")
 parser.add_argument("--nEpochs", type=int, default=50, help="Number of epochs to train for")

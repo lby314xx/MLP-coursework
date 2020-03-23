@@ -61,6 +61,7 @@ class SKBlock(nn.Module):
         self.conv2 = nn.Conv2d(planes, planes, kernel_size=3, stride=stride, padding=1, bias=False)
         self.relu2 = nn.PReLU()
         self.sk = SKLayer(planes)
+        self.channelAttention = channelAttention(planes, planes)
 
     def forward(self, x):
         residual = x
@@ -69,6 +70,7 @@ class SKBlock(nn.Module):
 
         if self.use_sk:
             out = self.sk(out)
+            out = self.channelAttention(out)
         out += residual
         return out
 
@@ -82,14 +84,13 @@ class SKLayer(nn.Module):
         self.conv = nn.ModuleList()
         for i in range(M):
             self.conv.append(nn.Sequential(nn.Conv2d(channel, channel, 3, stride, padding=1+i, dilation=1+i, groups=32, bias=False),
-                                           # nn.BatchNorm2d(channel),
                                            nn.PReLU()))
         self.global_pool = nn.AdaptiveAvgPool2d(1)
         self.fc1 = nn.Sequential(nn.Conv2d(channel, d, 1, bias=False),
-                                 # nn.BatchNorm2d(d),
                                  nn.PReLU())
         self.fc2 = nn.Conv2d(d, channel*M, 1, 1, bias=False)
         self.softmax = nn.Softmax(dim=1)
+        self.channelAttention = channelAttention(channel, channel)
 
     def forward(self, xx):
         batch_size = xx.size(0)
@@ -110,4 +111,35 @@ class SKLayer(nn.Module):
         a_b = list(map(lambda x: x.reshape(batch_size, self.out_channels, 1, 1), a_b))
         V = list(map(lambda x, y: x*y, output, a_b))
         V = reduce(lambda x, y: x+y, V)
+        V = self.channelAttention(V)
         return V
+
+
+class channelAttention(nn.Module):
+    def __init__(self, inChannels, outChannels):
+        super(channelAttention, self).__init__()
+
+        self.swish = nn.Sigmoid()
+        self.channel_squeeze = nn.AdaptiveAvgPool2d(1)
+        self.conv_down = nn.Conv2d(inChannels * 4, inChannels // 4, kernel_size=1, bias=False)
+        self.conv_up = nn.Conv2d(inChannels // 4, inChannels * 4, kernel_size=1, bias=False)
+        self.sig = nn.Sigmoid()
+        self.trans1 = nn.Sequential(
+            nn.Conv2d(in_channels=inChannels, out_channels=inChannels * 4, kernel_size=1, stride=1, padding=0, bias=False),
+            nn.PReLU(),
+        )
+        self.trans2 = nn.Sequential(
+            nn.Conv2d(in_channels=inChannels * 4, out_channels=outChannels, kernel_size=1, stride=1, padding=0, bias=False),
+            nn.PReLU(),
+        )
+
+    def forward(self, x):
+        ex = self.trans1(x)
+        out1 = self.channel_squeeze(ex)
+        out1 = self.conv_down(out1)
+        out1 = out1*self.swish(out1)
+        out1 = self.conv_up(out1)
+        weight = self.sig(out1)
+        out = ex*weight
+        out = self.trans2(out)
+        return out
