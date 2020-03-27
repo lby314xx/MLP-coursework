@@ -179,7 +179,6 @@ def predict(img_read, save, convert, eva, name):
     # model = torch.load(opt.model, map_location='cpu')['modelPth']
     # torch.save(model.state_dict(), '1.pth')
     weights = torch.load(opt.model, map_location=torch.device('cpu'))
-    print(weights.keys())
     saved_state = weights['modelPth'].state_dict()
     if UseCPU:
         from collections import OrderedDict
